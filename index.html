@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compartilhar Localização</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #282c34;
+            color: #ffffff;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 1.5em;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 1em;
+            color: #ffffff;
+            background-color: #1e90ff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #888;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Compartilhar Localização</h1>
+        <p id="status">Obtendo localização...</p>
+        <button id="shareButton" disabled onclick="shareLocation()">Compartilhar</button>
+    </div>
+
+    <script>
+        let latitude, longitude;
+
+        // Obtém a localização exata do usuário
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError, {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                });
+            } else {
+                document.getElementById("status").innerText = "Geolocalização não suportada.";
+            }
+        }
+
+        function showPosition(position) {
+            latitude = position.coords.latitude;
+            longitude = position.coords.longitude;
+            document.getElementById("status").innerText = "Localização obtida!";
+            document.getElementById("shareButton").disabled = false;
+        }
+
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    document.getElementById("status").innerText = "Permissão de localização negada. Verifique as configurações do seu dispositivo.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    document.getElementById("status").innerText = "Informação de localização indisponível.";
+                    break;
+                case error.TIMEOUT:
+                    document.getElementById("status").innerText = "Tempo para obter localização esgotado.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    document.getElementById("status").innerText = "Erro desconhecido ao obter localização.";
+                    break;
+            }
+        }
+
+        // Compartilha a localização via WhatsApp
+        function shareLocation() {
+            const phoneNumber = "5571992642889";
+            const message = `Minha localização exata: https://www.google.com/maps?q=${latitude},${longitude}`;
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, "_blank");
+        }
+
+        // Inicia a obtenção da localização
+        getLocation();
+    </script>
+</body>
+</html>
