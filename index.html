@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compartilhar Localização</title>
     <style>
+        /* Estilo para o body */
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -15,13 +16,18 @@
             color: #ffffff;
             margin: 0;
         }
+
+        /* Container principal */
         .container {
             text-align: center;
             padding: 20px;
+            display: none; /* Oculta o conteúdo até o carregamento */
         }
+
         h1 {
             font-size: 1.5em;
         }
+
         button {
             padding: 15px 30px;
             font-size: 1em;
@@ -31,13 +37,68 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         button:disabled {
             background-color: #888;
             cursor: not-allowed;
         }
+
+        /* Estilo para o Preloader */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        #preloader-logo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        #loading-dots {
+            display: flex;
+            font-size: 24px;
+            color: #ffffff;
+            position: absolute;
+            bottom: 20%;
+        }
+
+        #loading-dots span {
+            animation: dots 1s infinite;
+            margin: 0 3px;
+        }
+
+        @keyframes dots {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        #loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        #loading-dots span:nth-child(3) { animation-delay: 0.4s; }
     </style>
 </head>
 <body>
+    <!-- Tela de carregamento -->
+    <div id="preloader">
+        <img src="EAF.png" alt="Logo" id="preloader-logo">
+        <div id="loading-dots">
+            <span>.</span><span>.</span><span>.</span>
+        </div>
+    </div>
+
+    <!-- Conteúdo principal do site -->
     <div class="container">
         <h1>Compartilhar Localização</h1>
         <p id="status">Obtendo localização...</p>
@@ -46,6 +107,15 @@
 
     <script>
         let latitude, longitude;
+
+        // Exibe o conteúdo principal após 1 segundo e esconde o preloader
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(function() {
+                document.getElementById("preloader").style.display = "none";
+                document.querySelector(".container").style.display = "block";
+                getLocation();
+            }, 1000);
+        });
 
         // Obtém a localização exata do usuário
         function getLocation() {
@@ -91,9 +161,6 @@
             const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, "_blank");
         }
-
-        // Inicia a obtenção da localização
-        getLocation();
     </script>
 </body>
 </html>
