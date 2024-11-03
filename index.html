@@ -5,45 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compartilhar Localização</title>
     <style>
-        /* Estilo para o body */
-        body {
+        /* Reset de margens e design */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: Arial, sans-serif;
+        }
+
+        /* Estilo para o corpo */
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #282c34;
+            background-color: #0062e3;
             color: #ffffff;
-            margin: 0;
         }
 
-        /* Container principal */
-        .container {
-            text-align: center;
-            padding: 20px;
-            display: none; /* Oculta o conteúdo até o carregamento */
-        }
-
-        h1 {
-            font-size: 1.5em;
-        }
-
-        button {
-            padding: 15px 30px;
-            font-size: 1em;
-            color: #ffffff;
-            background-color: #1e90ff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:disabled {
-            background-color: #888;
-            cursor: not-allowed;
-        }
-
-        /* Estilo para o Preloader */
+        /* Estilo para a tela de carregamento */
         #preloader {
             position: fixed;
             top: 0;
@@ -54,6 +34,7 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
+            background-color: #009FE3;
         }
 
         #preloader-logo {
@@ -87,6 +68,74 @@
 
         #loading-dots span:nth-child(2) { animation-delay: 0.2s; }
         #loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        /* Container principal */
+        .container {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        p#status {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            color: #e0f7ff;
+        }
+
+        /* Estilo do botão de compartilhamento */
+        button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            color: #ffffff;
+            background: linear-gradient(135deg, #ff430a, #ff5e00);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            outline: none;
+        }
+
+        button:disabled {
+            background-color: #888;
+            cursor: not-allowed;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #FF8A00, #FF5722);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        button:active {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Ícone do botão de localização */
+        .location-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: #ffffff;
+            mask: url('https://img.icons8.com/ios-filled/50/000000/place-marker.png') no-repeat center;
+            -webkit-mask: url('https://img.icons8.com/ios-filled/50/000000/place-marker.png') no-repeat center;
+            mask-size: contain;
+            -webkit-mask-size: contain;
+        }
     </style>
 </head>
 <body>
@@ -102,7 +151,10 @@
     <div class="container">
         <h1>Compartilhar Localização</h1>
         <p id="status">Obtendo localização...</p>
-        <button id="shareButton" disabled onclick="shareLocation()">Compartilhar</button>
+        <button id="shareButton" disabled onclick="shareLocation()">
+            <span class="location-icon"></span>
+            Compartilhar
+        </button>
     </div>
 
     <script>
@@ -112,7 +164,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             setTimeout(function() {
                 document.getElementById("preloader").style.display = "none";
-                document.querySelector(".container").style.display = "block";
+                document.querySelector(".container").style.display = "flex";
                 getLocation();
             }, 1000);
         });
@@ -156,7 +208,7 @@
 
         // Compartilha a localização via WhatsApp
         function shareLocation() {
-            const phoneNumber = "5571992642889";
+            const phoneNumber = "5511942707604";
             const message = `Minha localização exata: https://www.google.com/maps?q=${latitude},${longitude}`;
             const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, "_blank");
